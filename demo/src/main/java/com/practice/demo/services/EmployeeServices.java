@@ -26,9 +26,6 @@ public class EmployeeServices {
   private EmployeeRepo employeeRepo;
 
   @Autowired
-  private InventoryServices services;
-
-  @Autowired
   private DepartmentRepo departmentRepo;
 
   @Transactional
@@ -99,21 +96,4 @@ public class EmployeeServices {
 
     return "Employees updated";
   }
-
-  @Transactional
-  public void createMultipleData() {
-    processInsertBarang();
-    processInsertDataEmployee();
-    services.insertInventory();
-  }
-
-  public void processInsertBarang() {
-//    save ke table barang
-  }
-
-  public void processInsertDataEmployee() {
-//    save ke table employee
-  }
-
-
 }
