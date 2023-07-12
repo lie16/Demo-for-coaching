@@ -2,10 +2,12 @@ package com.practice.demo.controller;
 
 import com.practice.demo.handler.request.CreateBulkDepartmentDto;
 import com.practice.demo.handler.request.CreateDepartmentDto;
+import com.practice.demo.repository.DepartmentRepo;
 import com.practice.demo.services.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,9 @@ public class DepartmentController {
 
   @Autowired
   private DepartmentService departmentService;
+
+  @Autowired
+  private DepartmentRepo departmentRepo;
 
 
   @PostMapping("create")
@@ -39,5 +44,11 @@ public class DepartmentController {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
+
+  @GetMapping("list-departments")
+  public ResponseEntity getListDepartments() {
+    return ResponseEntity.ok(departmentRepo.findAll());
+  }
+
 
 }
