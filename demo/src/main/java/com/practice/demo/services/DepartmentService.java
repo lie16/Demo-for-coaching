@@ -16,9 +16,7 @@ public class DepartmentService {
 
   @Autowired
   private DepartmentRepo departmentRepo;
-
-
-
+  
   public String createDepartment(CreateDepartmentDto createDepartmentDto) throws Exception {
     Department department = new Department();
     if (departmentRepo.findDepartmentByDepartmentName(createDepartmentDto.getDepartmentName()) == null) {

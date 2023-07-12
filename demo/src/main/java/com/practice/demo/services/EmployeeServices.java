@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,11 +37,8 @@ public class EmployeeServices {
     employee.setUpdatedDate(new Date());
 
     Optional<Department> department = departmentRepo.findById(createEmployeeDto.getDepartmentId());
-
     employee.setDepartment(department.get());
     employeeRepo.save(employee);
-
-    employeeRepo.delete(employee);
     return "employee created successfully";
   }
 
