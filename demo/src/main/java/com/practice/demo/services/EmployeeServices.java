@@ -5,7 +5,6 @@ import com.practice.demo.entities.Employee;
 import com.practice.demo.handler.request.CreateEmployeeDto;
 import com.practice.demo.handler.response.DepartmentDto;
 import com.practice.demo.handler.response.EmployeesResponse;
-import com.practice.demo.repository.DepartmentRepo;
 import com.practice.demo.repository.EmployeeRepo;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,15 +16,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class EmployeeServices {
 
   @Autowired
   private EmployeeRepo employeeRepo;
-
-  @Autowired
-  private DepartmentRepo departmentRepo;
 
   @Transactional
   public String createEmployee(CreateEmployeeDto createEmployeeDto) {
@@ -36,15 +33,18 @@ public class EmployeeServices {
     employee.setCreatedDate(new Date());
     employee.setUpdatedDate(new Date());
 
-    Optional<Department> department = departmentRepo.findById(createEmployeeDto.getDepartmentId());
-    employee.setDepartment(department.get());
+//    ambil data department dari department service --------------------------------
+    String url = "http://localhost:8882/api-v1/department/detail?departmentId=" + createEmployeeDto.getDepartmentId();
+    RestTemplate restTemplate = new RestTemplate();
+    Department department = restTemplate.getForObject(url, Department.class);
+//    ---------------------------------------------------------------
+
+    employee.setDepartment(department);
     employeeRepo.save(employee);
     return "employee created successfully";
   }
 
   public List<EmployeesResponse> getEmployees() {
-    List<Employee> employees = employeeRepo.findAll();
-
 //    pagination
     Pageable pageable = PageRequest.of(0, 10);
     Page<Employee> page = employeeRepo.findAll(pageable);
@@ -58,7 +58,7 @@ public class EmployeeServices {
       employeesResponse.setEmployeeName(employee.getEmployeeName());
 
 //      get department data
-      Department department = employee.getDepartment();
+      Department department = employee.getDepartment(); //call api dept service
 
       DepartmentDto departmentDto = new DepartmentDto();
       departmentDto.setDepartmentName(department.getDepartmentName());
