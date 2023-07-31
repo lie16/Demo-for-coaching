@@ -38,7 +38,7 @@ public class EmployeeController {
       return ResponseEntity.status(response.getStatusCode()).body(response);
   }
 
-  @GetMapping
+  @GetMapping("")
   public ResponseEntity getEmployees() {
     List<EmployeesResponse> employees = employeeService.getEmployees();
     return ResponseEntity.ok(employees);
