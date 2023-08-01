@@ -7,8 +7,6 @@ h
 8demo/src/main/java/com/practice/demo/entities/Users.java,c\7\c7971cf2c62fba0bb2cde52cb44ad180e35e400a
 t
 Ddemo/src/main/java/com/practice/demo/controller/UsersController.java,4\c\4c10020750b14da6946045be7449b24fb8593e35
-<
-demo/pom.xml,f\1\f1bf400bc0784549511ea07030d3a798eb8c0511
 ^
 .demo/src/main/resources/application.properties,b\d\bdf594d855e1d9326b9686f862c1fa6049f75420
 {
