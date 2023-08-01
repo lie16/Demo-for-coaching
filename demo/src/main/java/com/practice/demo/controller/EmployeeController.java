@@ -44,6 +44,12 @@ public class EmployeeController {
     return ResponseEntity.ok(employees);
   }
 
+  @GetMapping("rest")
+  public ResponseEntity getEmployeesRest() {
+      List<EmployeesResponse> employees = employeeService.getEmployeFromOtherServices();
+      return ResponseEntity.ok(employees);
+  }
+
   @PutMapping("update")
   public ResponseEntity updateEmployee(@RequestBody CreateEmployeeDto createEmployeeDto, @RequestParam("employeeid") int employeeId) {
     try {

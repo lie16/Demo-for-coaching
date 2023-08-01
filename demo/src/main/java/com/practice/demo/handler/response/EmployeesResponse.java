@@ -2,6 +2,7 @@ package com.practice.demo.handler.response;
 
 import lombok.Data;
 
+//These method support @ToString, @EqualsAndHashCode, @Getter / @Setter and @RequiredArgsConstructor
 @Data
 public class EmployeesResponse {
   private int employeeId;
@@ -10,6 +11,7 @@ public class EmployeesResponse {
   private String phoneNumber;
 
   private DepartmentDto departmentDto;
+  private String departmentName;
 
   private long totalData;
 

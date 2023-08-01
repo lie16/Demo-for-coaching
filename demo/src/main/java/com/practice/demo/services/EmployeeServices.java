@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -58,10 +59,16 @@ public class EmployeeServices {
       employeesResponse.setEmployeeName(employee.getEmployeeName());
 
 //      get department data
-      Department department = employee.getDepartment(); //call api dept service
+      String url = "http://localhost:8882/api-v1/department/detail?departmentId=" + employee.getDepartment();
+      RestTemplate restTemplate = new RestTemplate();
+      Department department = restTemplate.getForObject(url, Department.class);
+
+
+//      Department department = employee.getDepartment(); //call api dept service
 
       DepartmentDto departmentDto = new DepartmentDto();
       departmentDto.setDepartmentName(department.getDepartmentName());
+      employeesResponse.setDepartmentName(department.getDepartmentName());
 
       employeesResponse.setDepartmentDto(departmentDto);
 
@@ -72,6 +79,14 @@ public class EmployeeServices {
       responses.add(employeesResponse);
     }
     return responses;
+  }
+
+  public List<EmployeesResponse> getEmployeFromOtherServices(){
+    String url = "http://localhost:8883/api-v1/employee";
+    RestTemplate restTemplate = new RestTemplate();
+    ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+    System.out.println("body result" + response.getBody());
+    return null;
   }
 
   @Transactional
