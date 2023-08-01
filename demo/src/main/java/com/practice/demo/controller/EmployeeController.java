@@ -38,6 +38,16 @@ public class EmployeeController {
       return ResponseEntity.status(response.getStatusCode()).body(response);
   }
 
+@PostMapping("create-rest")
+public ResponseEntity createEmployeeRest(@RequestBody CreateEmployeeDto createEmployeeDto) {
+    String result = employeeService.createEmployeeRest(createEmployeeDto);
+    CreateEmployeeResponse response = new CreateEmployeeResponse();
+    response.setStatus("Created");
+    response.setStatusCode(HttpStatus.CREATED.value());
+    response.setResultMessage(result);
+    return ResponseEntity.status(response.getStatusCode()).body(response);
+}
+
   @GetMapping("")
   public ResponseEntity getEmployees() {
     List<EmployeesResponse> employees = employeeService.getEmployees();

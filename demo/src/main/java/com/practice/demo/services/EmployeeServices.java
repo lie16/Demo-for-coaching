@@ -20,8 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -50,6 +49,34 @@ public class EmployeeServices {
     employee.setDepartment(department);
     employeeRepo.save(employee);
     return "employee created successfully";
+  }
+
+  public String createEmployeeRest(CreateEmployeeDto createEmployeeDto) {
+    Employee employee = new Employee();
+    employee.setEmployeeName(createEmployeeDto.getEmployeeName());
+    employee.setEmail(createEmployeeDto.getEmail());
+    employee.setPhoneNumber(createEmployeeDto.getPhoneNumber());
+    employee.setCreatedDate(new Date());
+    employee.setUpdatedDate(new Date());
+//    ambil data department dari department service --------------------------------
+    String url = "http://localhost:8882/api-v1/department/detail?departmentId=" + createEmployeeDto.getDepartmentId();
+    RestTemplate restTemplate = new RestTemplate();
+    Department department = restTemplate.getForObject(url, Department.class);
+//    ---------------------------------------------------------------
+
+
+//    RestTemplate restTemplate = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    String urlCreate = "http://127.0.0.1:8881/api-v1/employee/create";
+    String requestBody = "{\"employeeName\":\"createEmployeeDto.getEmployeeName(),\"" +
+            "\"email\":\"createEmployeeDto.getEmail(),\"" +
+            "\"phoneNumber\":\"createEmployeeDto.getPhoneNumber(),\"" +
+            "\"departmentId\":\"createEmployeeDto.getDepartmentId()\"}";
+    HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+    String response = restTemplate.postForObject(urlCreate, request, String.class);
+
+    return response;
   }
 
   public List<EmployeesResponse> getEmployees() {
