@@ -1,7 +1,11 @@
 package com.practice.demo.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.practice.demo.entities.Department;
 import com.practice.demo.entities.Employee;
+import com.practice.demo.entities.EmployeeDto;
 import com.practice.demo.handler.request.CreateEmployeeDto;
 import com.practice.demo.handler.response.DepartmentDto;
 import com.practice.demo.handler.response.EmployeesResponse;
@@ -10,10 +14,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,9 +91,43 @@ public class EmployeeServices {
   public List<EmployeesResponse> getEmployeFromOtherServices(){
     String url = "http://localhost:8883/api-v1/employee";
     RestTemplate restTemplate = new RestTemplate();
+//    TODO:: disini bisa gak mapping langsung ke object, jadi pake request for object
     ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-    System.out.println("body result" + response.getBody());
-    return null;
+//    System.out.println("body result" + response.getBody());
+    Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
+    ObjectMapper mapper = new ObjectMapper();
+    JsonNode root = null;
+    try {
+      root = mapper.readTree(response.getBody());
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
+//    System.out.println("root result" + root.toString());
+    List<EmployeesResponse> responses = new ArrayList<>();
+    if (root.isArray()) {
+
+      for (final JsonNode objNode : root) {
+//        System.out.println(objNode);
+//        ndek sini baru terjadi mapping terhadap dto untuk ta lempar
+        EmployeesResponse employeesResponse = new EmployeesResponse();
+        employeesResponse.setEmployeeId(objNode.path("employeeId").asInt());
+        employeesResponse.setEmail(objNode.path("email").asText());
+        employeesResponse.setPhoneNumber(objNode.path("phoneNumber").asText());
+        employeesResponse.setEmployeeName(objNode.path("employeeName").asText());
+
+        DepartmentDto departmentDto = new DepartmentDto();
+//        TODO: ada cara lebih sederhana untuk multi path ini
+//         lalu gimana kalau path dalamnya array di loop dulu?
+        departmentDto.setDepartmentName(objNode.path("departmentDto").path("departmentName").asText());
+        employeesResponse.setDepartmentDto(departmentDto);
+
+        employeesResponse.setDepartmentName(objNode.path("departmentName").asText());
+        employeesResponse.setTotalData(objNode.path("totalData").asInt());
+        employeesResponse.setTotalHalaman(objNode.path("totalHalaman").asInt());
+        responses.add(employeesResponse);
+      }
+    }
+    return responses;
   }
 
   @Transactional
