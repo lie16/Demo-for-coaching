@@ -67,16 +67,22 @@ public class EmployeeServices {
 
 
 //    RestTemplate restTemplate = new RestTemplate();
+    System.out.println(createEmployeeDto.toString());
     HttpHeaders headers = new HttpHeaders();
     RestTemplate restTemplate = new RestTemplate();
     headers.setContentType(MediaType.APPLICATION_JSON);
     String urlCreate = "http://127.0.0.1:8881/api-v1/employee/create";
+//    JSONObject request = new JSONObject();
+//    request.put("employee", employee);
+//    request.put("amount", amount);
+//    request.put("datejoined", datejoined);
 //    String requestBody = "{\"employeeName\":\"createEmployeeDto.getEmployeeName(),\"" +
 //            "\"email\":\"createEmployeeDto.getEmail(),\"" +
 //            "\"phoneNumber\":\"createEmployeeDto.getPhoneNumber(),\"" +
 //            "\"departmentId\":\"createEmployeeDto.getDepartmentId()\"}";
 //    TODO soal ini juga idealnya gimana dicampur dengan request?
     HttpEntity<CreateEmployeeDto> requestEntity = new HttpEntity<>(createEmployeeDto, headers);
+    System.out.println(requestEntity.toString());
 //    HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
     return restTemplate.postForObject(urlCreate, requestEntity, String.class);
   }
