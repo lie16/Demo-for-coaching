@@ -52,31 +52,33 @@ public class EmployeeServices {
   }
 
   public String createEmployeeRest(CreateEmployeeDto createEmployeeDto) {
-    Employee employee = new Employee();
-    employee.setEmployeeName(createEmployeeDto.getEmployeeName());
-    employee.setEmail(createEmployeeDto.getEmail());
-    employee.setPhoneNumber(createEmployeeDto.getPhoneNumber());
-    employee.setCreatedDate(new Date());
-    employee.setUpdatedDate(new Date());
+//    Employee employee = new Employee();
+//    employee.setEmployeeName(createEmployeeDto.getEmployeeName());
+//    employee.setEmail(createEmployeeDto.getEmail());
+//    employee.setPhoneNumber(createEmployeeDto.getPhoneNumber());
+//    employee.setCreatedDate(new Date());
+//    employee.setUpdatedDate(new Date());
+
 //    ambil data department dari department service --------------------------------
-    String url = "http://localhost:8882/api-v1/department/detail?departmentId=" + createEmployeeDto.getDepartmentId();
-    RestTemplate restTemplate = new RestTemplate();
-    Department department = restTemplate.getForObject(url, Department.class);
+//    String url = "http://localhost:8882/api-v1/department/detail?departmentId=" + createEmployeeDto.getDepartmentId();
+//    RestTemplate restTemplate = new RestTemplate();
+//    Department department = restTemplate.getForObject(url, Department.class);
 //    ---------------------------------------------------------------
 
 
 //    RestTemplate restTemplate = new RestTemplate();
     HttpHeaders headers = new HttpHeaders();
+    RestTemplate restTemplate = new RestTemplate();
     headers.setContentType(MediaType.APPLICATION_JSON);
     String urlCreate = "http://127.0.0.1:8881/api-v1/employee/create";
-    String requestBody = "{\"employeeName\":\"createEmployeeDto.getEmployeeName(),\"" +
-            "\"email\":\"createEmployeeDto.getEmail(),\"" +
-            "\"phoneNumber\":\"createEmployeeDto.getPhoneNumber(),\"" +
-            "\"departmentId\":\"createEmployeeDto.getDepartmentId()\"}";
-    HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
-    String response = restTemplate.postForObject(urlCreate, request, String.class);
-
-    return response;
+//    String requestBody = "{\"employeeName\":\"createEmployeeDto.getEmployeeName(),\"" +
+//            "\"email\":\"createEmployeeDto.getEmail(),\"" +
+//            "\"phoneNumber\":\"createEmployeeDto.getPhoneNumber(),\"" +
+//            "\"departmentId\":\"createEmployeeDto.getDepartmentId()\"}";
+//    TODO soal ini juga idealnya gimana dicampur dengan request?
+    HttpEntity<CreateEmployeeDto> requestEntity = new HttpEntity<>(createEmployeeDto, headers);
+//    HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
+    return restTemplate.postForObject(urlCreate, requestEntity, String.class);
   }
 
   public List<EmployeesResponse> getEmployees() {
