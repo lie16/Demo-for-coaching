@@ -11,7 +11,7 @@ import lombok.Data;
 public class Department extends BaseModel {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int departmentId;
   private String departmentName;
 

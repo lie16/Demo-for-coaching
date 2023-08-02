@@ -43,6 +43,7 @@ public class JwtUtils {
 
 //  todo set custom message menjadi response di jwt ini dimana?
 //  validateToken
+//  yang nangkep kondisi token
   public boolean validateToken(String token) {
     try {
       return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token) != null;

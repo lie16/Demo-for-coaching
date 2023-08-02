@@ -3,6 +3,7 @@ package com.practice.demo.handler.response;
 import lombok.Data;
 
 //These method support @ToString, @EqualsAndHashCode, @Getter / @Setter and @RequiredArgsConstructor
+//Full set table
 @Data
 public class EmployeesResponse {
   private int employeeId;

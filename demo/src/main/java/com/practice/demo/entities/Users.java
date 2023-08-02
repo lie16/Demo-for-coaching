@@ -17,8 +17,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Entity
 public class Users implements UserDetails {
 
+//  Auto create hibernate_sequence for all table
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int userId;
 
   private String email;

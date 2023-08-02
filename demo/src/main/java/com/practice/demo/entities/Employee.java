@@ -21,7 +21,7 @@ import lombok.Setter;
 public class Employee extends BaseModel {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int employeeId;
   private String employeeName;
   private String email;
