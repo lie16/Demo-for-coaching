@@ -177,4 +177,23 @@ public class EmployeeServices {
 
     return "Employees updated";
   }
+
+  public String updateEmployeesRest(CreateEmployeeDto createEmployeeDto, int employeeId)
+          throws Exception {
+//    bikin rest find by id dulu di emp service, bisa skip dan dilakukan di service emp aja sih
+    Optional<Employee> employee = employeeRepo.findById(employeeId);
+
+    if (!employee.isPresent()) {
+      throw new Exception("Employee " + employeeId + " not found");
+    }
+    //    utk delete (HTTP METHOD DeleteMapping)
+    //    employeeRepo.delete(employee.get());
+    //    employee.get().setIsdeleted(true);
+    employee.get().setEmployeeName(createEmployeeDto.getEmployeeName());
+    employee.get().setEmail(createEmployeeDto.getEmail());
+//ganti ke send ke emp service
+    employeeRepo.save(employee.get());
+
+    return "Employees updated";
+  }
 }
